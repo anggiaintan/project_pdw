@@ -1,4 +1,3 @@
-<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script>
+    // Redirect to login if not logged in as admin
+    if (localStorage.getItem("isLoggedIn") !== "true" || localStorage.getItem("userType") !== "admin") {
+      window.location.href = 'index.html';
+    }
+  </script>
 </head>
 <body>
   <div class="container mt-5">
     <h1>Admin Dashboard</h1>
+    <button class="btn btn-danger mb-3" onclick="logout()">Logout</button>
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="members-tab" data-bs-toggle="tab" data-bs-target="#members" type="button" role="tab" aria-controls="members" aria-selected="true">Manage Members</button>
@@ -27,13 +33,12 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Actions</th>
+              <th>Username</th>
+              <th>Action</th>
             </tr>
           </thead>
-          <tbody id="membersTable">
-            <!-- Members data will be populated here -->
+          <tbody id="membersTableBody">
+            <!-- Members list will be populated here -->
           </tbody>
         </table>
       </div>
@@ -47,18 +52,18 @@
               <th>ID</th>
               <th>Title</th>
               <th>Author</th>
-              <th>Actions</th>
+              <th>Action</th>
             </tr>
           </thead>
-          <tbody id="booksTable">
-            <!-- Books data will be populated here -->
+          <tbody id="booksTableBody">
+            <!-- Books list will be populated here -->
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- Modals for adding members and books -->
+  <!-- Add Member Modal -->
   <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -67,22 +72,24 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="addMemberForm">
-            <div class="mb-3">
-              <label for="memberName" class="form-label">Name</label>
-              <input type="text" class="form-control" id="memberName" required>
-            </div>
-            <div class="mb-3">
-              <label for="memberEmail" class="form-label">Email</label>
-              <input type="email" class="form-control" id="memberEmail" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Add</button>
-          </form>
+          <div class="mb-3">
+            <label for="newMemberUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="newMemberUsername">
+          </div>
+          <div class="mb-3">
+            <label for="newMemberPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="newMemberPassword">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addMember()">Add Member</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Add Book Modal -->
   <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -91,145 +98,117 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="addBookForm">
-            <div class="mb-3">
-              <label for="bookTitle" class="form-label">Title</label>
-              <input type="text" class="form-control" id="bookTitle" required>
-            </div>
-            <div class="mb-3">
-              <label for="bookAuthor" class="form-label">Author</label>
-              <input type="text" class="form-control" id="bookAuthor" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Add</button>
-          </form>
+          <div class="mb-3">
+            <label for="newBookTitle" class="form-label">Title</label>
+            <input type="text" class="form-control" id="newBookTitle">
+          </div>
+          <div class="mb-3">
+            <label for="newBookAuthor" class="form-label">Author</label>
+            <input type="text" class="form-control" id="newBookAuthor">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addBook()">Add Book</button>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBogGzOgGO+H9fX2yjw9e/gmrtWtM11E83mrUAH2GgbVYBgg" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBogGzOgGO+H9fX2yjw9e/gmrtWtM11E83mrUAH2GgbVYBgg" crossorigin="anonymous"></script>
   <script>
-    // Example data
-    const members = [
-      { id: 1, name: 'John Doe', email: 'john@example.com' },
-      { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
-    ];
-
-    const books = [
-      { id: 1, title: 'JavaScript for Beginners', author: 'John Doe' },
-      { id: 2, title: 'Advanced CSS Techniques', author: 'Jane Smith' }
-    ];
-
-    // Populate members table
-    function populateMembersTable() {
-      const membersTable = document.getElementById('membersTable');
-      membersTable.innerHTML = '';
-      members.forEach(member => {
-        const row = `
-          <tr>
-            <td>${member.id}</td>
-            <td>${member.name}</td>
-            <td>${member.email}</td>
-            <td>
-              <button class="btn btn-warning btn-sm" onclick="editMember(${member.id})">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">Delete</button>
-            </td>
-          </tr>
-        `;
-        membersTable.insertAdjacentHTML('beforeend', row);
-      });
+    // Fungsi untuk logout
+    function logout() {
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("username");
+      localStorage.removeItem("userType");
+      window.location.href = 'index.html';
     }
 
-    // Populate books table
-    function populateBooksTable() {
-      const booksTable = document.getElementById('booksTable');
-      booksTable.innerHTML = '';
-      books.forEach(book => {
-        const row = `
-          <tr>
-            <td>${book.id}</td>
-            <td>${book.title}</td>
-            <td>${book.author}</td>
-            <td>
-              <button class="btn btn-warning btn-sm" onclick="editBook(${book.id})">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteBook(${book.id})">Delete</button>
-            </td>
-          </tr>
-        `;
-        booksTable.insertAdjacentHTML('beforeend', row);
-      });
-    }
-
-    // Show add member modal
+    // Fungsi untuk menampilkan modal tambah anggota
     function showAddMemberModal() {
-      const addMemberModal = new bootstrap.Modal(document.getElementById('addMemberModal'));
+      var addMemberModal = new bootstrap.Modal(document.getElementById('addMemberModal'));
       addMemberModal.show();
     }
 
-    // Show add book modal
+    // Fungsi untuk menambahkan anggota baru
+    function addMember() {
+      var username = document.getElementById('newMemberUsername').value;
+      var password = document.getElementById('newMemberPassword').value;
+      var registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+
+      registeredUsers.push({ username: username, password: password });
+      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+
+      alert("Member added successfully!");
+      location.reload();
+    }
+
+    // Fungsi untuk menampilkan modal tambah buku
     function showAddBookModal() {
-      const addBookModal = new bootstrap.Modal(document.getElementById('addBookModal'));
+      var addBookModal = new bootstrap.Modal(document.getElementById('addBookModal'));
       addBookModal.show();
     }
 
-    // Add member
-    document.getElementById('addMemberForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const name = document.getElementById('memberName').value;
-      const email = document.getElementById('memberEmail').value;
-      const newMember = { id: members.length + 1, name, email };
-      members.push(newMember);
-      populateMembersTable();
-      const addMemberModal = bootstrap.Modal.getInstance(document.getElementById('addMemberModal'));
-      addMemberModal.hide();
-    });
+    // Fungsi untuk menambahkan buku baru
+    function addBook() {
+      var title = document.getElementById('newBookTitle').value;
+      var author = document.getElementById('newBookAuthor').value;
+      var books = JSON.parse(localStorage.getItem("books")) || [];
 
-    // Add book
-    document.getElementById('addBookForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const title = document.getElementById('bookTitle').value;
-      const author = document.getElementById('bookAuthor').value;
-      const newBook = { id: books.length + 1, title, author };
-      books.push(newBook);
-      populateBooksTable();
-      const addBookModal = bootstrap.Modal.getInstance(document.getElementById('addBookModal'));
-      addBookModal.hide();
-    });
+      books.push({ title: title, author: author });
+      localStorage.setItem("books", JSON.stringify(books));
 
-    // Edit member
-    function editMember(id) {
-      // Implement edit member logic
-      alert(`Edit member with ID ${id}`);
+      alert("Book added successfully!");
+      location.reload();
     }
 
-    // Delete member
-    function deleteMember(id) {
-      const memberIndex = members.findIndex(member => member.id === id);
-      if (memberIndex !== -1) {
-        members.splice(memberIndex, 1);
-        populateMembersTable();
-      }
+    // Fungsi untuk memuat data anggota dan buku
+    function loadData() {
+      var registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+      var membersTableBody = document.getElementById('membersTableBody');
+      membersTableBody.innerHTML = '';
+      registeredUsers.forEach(function (user, index) {
+        var row = `<tr>
+          <td>${index + 1}</td>
+          <td>${user.username}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteMember(${index})">Delete</button></td>
+        </tr>`;
+        membersTableBody.innerHTML += row;
+      });
+
+      var books = JSON.parse(localStorage.getItem("books")) || [];
+      var booksTableBody = document.getElementById('booksTableBody');
+      booksTableBody.innerHTML = '';
+      books.forEach(function (book, index) {
+        var row = `<tr>
+          <td>${index + 1}</td>
+          <td>${book.title}</td>
+          <td>${book.author}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteBook(${index})">Delete</button></td>
+        </tr>`;
+        booksTableBody.innerHTML += row;
+      });
     }
 
-    // Edit book
-    function editBook(id) {
-      // Implement edit book logic
-      alert(`Edit book with ID ${id}`);
+    // Fungsi untuk menghapus anggota
+    function deleteMember(index) {
+      var registeredUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+      registeredUsers.splice(index, 1);
+      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+      loadData();
     }
 
-    // Delete book
-    function deleteBook(id) {
-      const bookIndex = books.findIndex(book => book.id === id);
-      if (bookIndex !== -1) {
-        books.splice(bookIndex, 1);
-        populateBooksTable();
-      }
+    // Fungsi untuk menghapus buku
+    function deleteBook(index) {
+      var books = JSON.parse(localStorage.getItem("books")) || [];
+      books.splice(index, 1);
+      localStorage.setItem("books", JSON.stringify(books));
+      loadData();
     }
 
-    // Initial population of tables
-    populateMembersTable();
-    populateBooksTable();
+    // Panggil loadData untuk memuat data saat halaman dimuat
+    window.onload = loadData;
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
