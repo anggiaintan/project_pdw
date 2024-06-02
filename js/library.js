@@ -5,6 +5,7 @@ const tBodyLibrary = document.getElementById("daftarBukuPerpus")
 function renderBooks(books) {
   tBodyLibrary.innerHTML = '';
 
+  
   books.forEach((buku, index) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
