@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="../img/logo.png" type="image/x-icon">
+  <title>Library</title>
+  <link rel="stylesheet" href="../style/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;1,100&family=Libre+Baskerville&family=Merriweather:wght@300;400;700&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <nav id="navbar" class="text-white">
+    <div class="container justify-content-between align-items-center d-flex p-2">
+      <div class="d-flex align-items-center">
+        <a class="navbar-brand">
+          <img src="../img/logo.png" style="width:65px">
+        </a>
+        <div class="d-flex">
+          <a class="nav-link mx-3" href="../main.html">Home</a>
+          <a class="nav-link mx-3" href="../main.html">About Us</a>
+          <a class="nav-link mx-3" href="#">Library</a>
+          <a class="nav-link mx-3" href="../main.html">Contact Us</a>
+        </div>
+      </div>
+
+      <form class="d-flex" id="formPencarian" role="search">
+        <div class="search d-flex">
+          <input class="form-control rounded-0 rounded-start" type="search" id="inputPencarian" placeholder="Search"
+            aria-label="Search" name="cari">
+          <button class="btn btn-success rounded-0 rounded-end" type="submit" name="btnSearch"><svg
+              xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+              viewBox="0 0 16 16">
+              <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg></button>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <figure class="text-center">
+      <blockquote class="blockquote">
+        <p><b>Buku yang Dipinjam</b></p>
+      </blockquote>
+    </figure>
+
+    <!-- tables -->
+    <table class="table table-bordered text-center align-middle">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Judul</th>
+          <th scope="col">Pengarang</th>
+          <th scope="col">Penerbit</th>
+          <th scope="col">Gambar</th>
+          <th scope="col">Aksi</th>
+        </tr>
+        <a></a>
+      </thead>
+      <tbody id="daftarBukuPerpus">
+      </tbody>
+    </table>
+  </div>
+  <div class="pt-5"></div>
+  <div class="pt-5"></div>
+  <!-- footer -->
+  <footer class="text-white">
+    <div class="container">
+      <div class="row pt-5">
+        <div class="col">
+          <img src="../img/logo.png" class="img-fluid text-center" style="width:85px">
+          <h5>Books Amazing</h5>
+          <p>Books Amazing adalah perpustakaan digital yang berkomitmen untuk menyediakan akses bebas hambatan ke dunia
+            pengetahuan.</p>
+        </div>
+        <div class="pt-2 col">
+          <div class="row">
+            <div class="col">
+              <h5>Hubungi Kami</h5>
+              <p><i class="fas fa-envelope"></i> Email: info@booksamazing.com</p>
+              <p><i class="fas fa-phone"></i> Telepon: (123) 456-7890</p>
+              <p><i class="fas fa-map-marker-alt"></i> Alamat: Jl. Pengetahuan No. 42, Kota Ilmu, 12345</p>
+            </div>
+            <div class="col">
+              <h5>Tautan Berguna</h5>
+              <ul class="tautanTambahan">
+                <li><a href="#" class="nav-link">Beranda</a></li>
+                <li><a href="#" class="nav-link">Koleksi Digital</a></li>
+                <li><a href="../main.html" class="nav-link">Tentang Kami</a></li>
+                <li><a href="../main.html" class="nav-link">Bergabung dengan Kami</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="text-center pt-4">
+          <p>&copy; 2024 Books Amazing. Hak Cipta Dilindungi.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- script js -->
+  <script src="../js/library.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
